@@ -9,8 +9,10 @@ from se3_group.se3 import SE3, interpolate_se3
 
 def main() -> None:
     """Run a simple demonstration."""
-
-    pose_0 = SE3()
+    pose_0 = SE3(
+        xyz=np.array([0.0, 0.0, 0.0]),
+        rot=np.eye(3),
+    )
     pose_1 = SE3(
         xyz=np.array([[2.0], [4.0], [8.0]]),
         roll_pitch_yaw=np.array([np.pi / 2, np.pi / 4, np.pi / 8]),

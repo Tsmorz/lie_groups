@@ -17,20 +17,27 @@ class SE3:
         self,
         xyz: Optional[np.ndarray] = None,
         roll_pitch_yaw: Optional[np.ndarray] = None,
+        rot: Optional[np.ndarray] = None,
     ):
         if xyz is None:
-            xyz = np.zeros((3, 1))
+            msg = "The translations vector 'xyz' must be provided."
+            logger.error(msg)
+            raise ValueError(msg)
         if xyz.shape == (3,):
-            xyz.reshape((3, 1))
+            xyz = np.reshape(xyz, (3, 1))
 
-        if roll_pitch_yaw is None:
-            roll_pitch_yaw = np.zeros((3,))
+        if rot is not None:
+            self.rot = rot
+        elif roll_pitch_yaw is not None:
+            if roll_pitch_yaw.shape == (3, 1):
+                roll_pitch_yaw = np.reshape(roll_pitch_yaw, (3,))
+            rot = Rot.from_euler(angles=roll_pitch_yaw, seq=EULER_ORDER)
+            self.rot = rot.as_matrix()
+        else:
+            msg = "Either 'roll_pitch_yaw' or 'rot' must be provided."
+            logger.error(msg)
+            raise ValueError(msg)
 
-        if roll_pitch_yaw.shape == (3, 1):
-            roll_pitch_yaw = np.reshape(roll_pitch_yaw, (3,))
-
-        rot = Rot.from_euler(angles=roll_pitch_yaw, seq=EULER_ORDER, degrees=False)
-        self.rot = rot.as_matrix()
         self.trans = xyz
 
     def __str__(self):  # pragma: no cover
@@ -45,12 +52,8 @@ class SE3:
     def __matmul__(self, other):
         """Perform a matrix multiplication between two SE3 matrices."""
         if isinstance(other, SE3):
-            dim = (3, 1)
             new_se3 = self.as_matrix() @ other.as_matrix()
-            xyz = new_se3[:3, -1]
-            rot = Rot.from_matrix(matrix=self.rot)
-            rpy = rot.as_euler(EULER_ORDER, degrees=False)
-            return SE3(xyz=np.reshape(xyz, dim), roll_pitch_yaw=np.reshape(rpy, dim))
+            return SE3(xyz=new_se3[:3, -1], rot=new_se3[:3, :3])
         else:
             msg = "Matrix multiplication is only supported between SE3 poses."
             logger.error(msg)
@@ -58,19 +61,22 @@ class SE3:
 
     def as_vector(self, degrees: bool = False) -> np.ndarray:
         """Represent the data as a 6-by-1 matrix."""
-        x = float(self.trans[0, 0])
-        y = float(self.trans[1, 0])
-        z = float(self.trans[2, 0])
-
+        xyz = np.reshape(self.trans, (3,))
         rot = Rot.from_matrix(matrix=self.rot)
-        roll, pitch, yaw = rot.as_euler(EULER_ORDER, degrees=degrees)
-        return np.array([[x], [y], [z], [roll], [pitch], [yaw]])
+        rpy = rot.as_euler(EULER_ORDER, degrees=degrees)
+        return np.hstack((xyz, rpy))
 
     def as_matrix(self) -> np.ndarray:
         """Represent the data as a 3-by-3 matrix."""
         matrix = np.hstack((self.rot, self.trans))
         matrix = np.vstack((matrix, np.array([[0.0, 0.0, 0.0, 1.0]])))
         return matrix
+
+    def inv(self) -> "SE3":
+        """Return the inverse of the SE3 pose."""
+        rot_inv = np.linalg.inv(self.rot)
+        trans_inv = -rot_inv @ self.trans
+        return SE3(rot=rot_inv, xyz=trans_inv)
 
     def plot(self, ax) -> None:
         """Plot the pose in 3D space.
