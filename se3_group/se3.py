@@ -29,9 +29,8 @@ class SE3:
         if roll_pitch_yaw.shape == (3, 1):
             roll_pitch_yaw = np.reshape(roll_pitch_yaw, (3,))
 
-        self.rot = Rot.from_euler(
-            angles=roll_pitch_yaw, seq="XYZ", degrees=False
-        ).as_matrix()
+        rot = Rot.from_euler(angles=roll_pitch_yaw, seq=EULER_ORDER, degrees=False)
+        self.rot = rot.as_matrix()
         self.trans = xyz
 
     def __str__(self):  # pragma: no cover
@@ -49,9 +48,8 @@ class SE3:
             dim = (3, 1)
             new_se3 = self.as_matrix() @ other.as_matrix()
             xyz = new_se3[:3, -1]
-            rpy = Rot.from_matrix(matrix=new_se3[:3, :3]).as_euler(
-                EULER_ORDER, degrees=False
-            )
+            rot = Rot.from_matrix(matrix=self.rot)
+            rpy = rot.as_euler(EULER_ORDER, degrees=False)
             return SE3(xyz=np.reshape(xyz, dim), roll_pitch_yaw=np.reshape(rpy, dim))
         else:
             msg = "Matrix multiplication is only supported between SE3 poses."
@@ -64,9 +62,8 @@ class SE3:
         y = float(self.trans[1, 0])
         z = float(self.trans[2, 0])
 
-        roll, pitch, yaw = Rot.from_matrix(matrix=self.rot).as_euler(
-            EULER_ORDER, degrees=degrees
-        )
+        rot = Rot.from_matrix(matrix=self.rot)
+        roll, pitch, yaw = rot.as_euler(EULER_ORDER, degrees=degrees)
         return np.array([[x], [y], [z], [roll], [pitch], [yaw]])
 
     def as_matrix(self) -> np.ndarray:
@@ -81,16 +78,13 @@ class SE3:
         :param ax: The axis to plot the pose.
         :return: None
         """
-        X, Y, Z = self.trans
-        U, V, W = self.rot[0, :]
-        ax.quiver(X, Y, Z, U, V, W, color="r")
-        U, V, W = self.rot[1, :]
-        ax.quiver(X, Y, Z, U, V, W, color="g")
-        U, V, W = self.rot[2, :]
-        ax.quiver(X, Y, Z, U, V, W, color="b")
+        x, y, z = self.trans
+        for i, color in enumerate(["r", "g", "b"]):
+            u, v, w = self.rot[i, :]
+            ax.quiver(X=x, Y=y, Z=z, U=u, V=v, W=w, color=color)
 
 
-def interpolate_se3(pose_0: SE3, pose_1: SE3, t: float) -> SE3:
+def interpolate_se3(pose_0: SE3, pose_1: SE3, t: float | np.floating) -> SE3:
     """Interpolate between two SE3 poses.
 
     :param pose_0: The first SE3 pose.
