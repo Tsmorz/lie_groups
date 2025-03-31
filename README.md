@@ -14,6 +14,12 @@ where:
 - \( $\mathbf{t} \in \mathbb{R}^3 $\) is the **translation vector**.
 
 This representation is commonly used in **robotics and computer vision** for rigid body transformations.
+
+<p align="center" width="80%">
+    <img width="500" alt="Screenshot 2025-03-31 at 9 37 41 AM" src="https://github.com/user-attachments/assets/15d5f56c-32f8-4e18-bb05-bf84c1b48fdc" />
+</p>
+
+
 ## Install
 To install the library run: `pip install se3_group`
 
