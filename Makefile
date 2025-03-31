@@ -5,12 +5,12 @@ init:
 	poetry env info
 	@echo "Created virtual environment"
 test:
-	poetry run pytest --cov=lie_groups/ --cov-report=term-missing --no-cov-on-fail
+	poetry run pytest --cov=lie_groups_py/ --cov-report=term-missing --no-cov-on-fail
 
 format:
 	ruff format
 	ruff check --fix
-	poetry run mypy lie_groups/ tests/ --ignore-missing-imports
+	poetry run mypy lie_groups_py/ tests/ --ignore-missing-imports
 
 clean:
 	rm -rf .venv

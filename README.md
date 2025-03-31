@@ -1,4 +1,4 @@
-# se3_group
+# LieGroupsPy
 Functions for the Lie Algebra group SE(3)
 
 $$ SE(3) =
@@ -21,7 +21,7 @@ This representation is commonly used in **robotics and computer vision** for rig
 
 
 ## Install
-To install the library run: `pip install se3_group`
+To install the library run: `pip install lie_groups_py`
 
 ## Development
 0. Install [Poetry](https://python-poetry.org/docs/#installing-with-the-official-installer)
@@ -29,7 +29,7 @@ To install the library run: `pip install se3_group`
 2. `make format` to format the code and check for errors
 3. `make test` to run the test suite
 4. `make clean` to delete the temporary files and directories
-5. `poetry publish --build` to build and publish to https://pypi.org/project/se3_group
+5. `poetry publish --build` to build and publish to https://pypi.org/project/lie_groups_py/
 
 
 ## Usage

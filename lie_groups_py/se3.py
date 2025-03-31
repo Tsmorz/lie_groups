@@ -3,11 +3,10 @@
 from typing import Optional
 
 import numpy as np
+from lie_groups.definitions import EULER_ORDER, VECTOR_LENGTH
 from loguru import logger
 from scipy import linalg
 from scipy.spatial.transform import Rotation as Rot
-
-from lie_groups.definitions import EULER_ORDER, VECTOR_LENGTH
 
 
 class SE3:
@@ -91,7 +90,7 @@ class SE3:
             ax.quiver(X=x, Y=y, Z=z, U=u, V=v, W=w, color=color)
 
 
-def interpolate(pose_0: SE3, pose_1: SE3, t: float | np.floating) -> SE3:
+def interpolate_se3(pose_0: SE3, pose_1: SE3, t: float | np.floating) -> SE3:
     """Interpolate between two SE3 poses.
 
     :param pose_0: The first SE3 pose.
