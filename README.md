@@ -1,18 +1,17 @@
 # se3_group
 Functions for the Lie Algebra group SE(3)
 
-$$
-SE(3) =
+$$ SE(3) =
 \begin{bmatrix}
     R_{11} & R_{12} & R_{13} & t_1 \\
     R_{21} & R_{22} & R_{23} & t_2 \\
     R_{31} & R_{32} & R_{33} & t_3 \\
     0 & 0 & 0 & 1
-\end{bmatrix}
-$$
+\end{bmatrix} $$
+
 where:
 - \( $\mathbf{R} \in SO(3) $\) is the **rotation matrix**.
-- \( $\mathbf{t} = \begin{bmatrix} t_1 & t_2 & t_3 \end{bmatrix}^T $\) is the **translation vector**.
+- \( $\mathbf{t} \in \mathbb{R}^3 $\) is the **translation vector**.
 
 This representation is commonly used in **robotics and computer vision** for rigid body transformations.
 
