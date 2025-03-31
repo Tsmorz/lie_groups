@@ -4,16 +4,16 @@ import matplotlib.pyplot as plt
 import numpy as np
 from loguru import logger
 
-from se3_group.se3 import SE3, interpolate_se3
+from se3_group import se3
 
 
 def main() -> None:
     """Run a simple demonstration."""
-    pose_0 = SE3(
+    pose_0 = se3.SE3(
         xyz=np.array([0.0, 0.0, 0.0]),
         rot=np.eye(3),
     )
-    pose_1 = SE3(
+    pose_1 = se3.SE3(
         xyz=np.array([[2.0], [4.0], [8.0]]),
         roll_pitch_yaw=np.array([np.pi / 2, np.pi / 4, np.pi / 8]),
     )
@@ -27,7 +27,7 @@ def main() -> None:
     pose_1.plot(ax)
 
     for t in np.arange(0.0, 1.01, 0.1):
-        pose_interp = interpolate_se3(pose_1, pose_0, t=t)
+        pose_interp = se3.interpolate(pose_1, pose_0, t=t)
         pose_interp.plot(ax)
         logger.info(f"Interpolated Pose at t={t:.2f}: {pose_interp}")
 

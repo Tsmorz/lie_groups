@@ -7,7 +7,7 @@ from loguru import logger
 from scipy import linalg
 from scipy.spatial.transform import Rotation as Rot
 
-from se3_group.definitions import EULER_ORDER
+from se3_group.definitions import EULER_ORDER, VECTOR_LENGTH
 
 
 class SE3:
@@ -78,19 +78,20 @@ class SE3:
         trans_inv = -rot_inv @ self.trans
         return SE3(rot=rot_inv, xyz=trans_inv)
 
-    def plot(self, ax) -> None:
+    def plot(self, ax, vector_length: float = VECTOR_LENGTH) -> None:
         """Plot the pose in 3D space.
 
         :param ax: The axis to plot the pose.
+        :param vector_length: The length of the vectors representing the pose axes.
         :return: None
         """
         x, y, z = self.trans
         for i, color in enumerate(["r", "g", "b"]):
-            u, v, w = self.rot[i, :]
+            u, v, w = vector_length * self.rot[i, :]
             ax.quiver(X=x, Y=y, Z=z, U=u, V=v, W=w, color=color)
 
 
-def interpolate_se3(pose_0: SE3, pose_1: SE3, t: float | np.floating) -> SE3:
+def interpolate(pose_0: SE3, pose_1: SE3, t: float | np.floating) -> SE3:
     """Interpolate between two SE3 poses.
 
     :param pose_0: The first SE3 pose.
