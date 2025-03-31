@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "se3_group"
-version = "0.1.1"
+version = "0.1.2"
 description = "Functions for SE(3) transformations."
 authors = ["Tsmorz <tonysmoragiewicz@gmail.com>"]
 readme = "README.md"
