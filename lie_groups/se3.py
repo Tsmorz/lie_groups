@@ -7,7 +7,7 @@ from loguru import logger
 from scipy import linalg
 from scipy.spatial.transform import Rotation as Rot
 
-from se3_group.definitions import EULER_ORDER, VECTOR_LENGTH
+from lie_groups.definitions import EULER_ORDER, VECTOR_LENGTH
 
 
 class SE3:

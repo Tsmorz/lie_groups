@@ -1,7 +1,7 @@
 [tool.poetry]
-name = "se3_group"
-version = "0.1.3"
-description = "Functions for SE(3) transformations."
+name = "lie_groups"
+version = "0.1.0"
+description = "Functions for the lie groups SE(2), SO(2), and SO(3), and SE(3)."
 authors = ["Tsmorz <tonysmoragiewicz@gmail.com>"]
 readme = "README.md"
 package-mode = true

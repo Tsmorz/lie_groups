@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from loguru import logger
 
-from se3_group import se3
+from lie_groups import se3
 
 
 def main() -> None:
