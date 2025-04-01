@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "lie_groups_py"
-version = "0.1.6"
+version = "0.1.7"
 description = "Functions for the lie groups SE(2), SO(2), and SO(3), and SE(3)."
 authors = ["Tsmorz <tonysmoragiewicz@gmail.com>"]
 readme = "README.md"
@@ -84,4 +84,4 @@ indent-style = "space"  # Use spaces instead of tabs
 line-ending = "lf"      # Use LF for line endings (Unix standard)
 
 [tool.poetry.urls]
-homepage = "https://github.com/Tsmorz/se3_group"
+homepage = "https://github.com/Tsmorz/lie_groups"
