@@ -11,12 +11,12 @@ python = "^3.13"
 numpy = "^2.2.3"
 scipy = "^1.15.2"
 pytest = "^8.3.5"
-pytest-cov = "^6.0.0"
 loguru = "^0.7.3"
 pre-commit = "^4.1.0"
 matplotlib = "^3.10.1"
 sympy = "^1.13.3"
 autograd = "^1.7.0"
+pytest-cov = "^6.1.0"
 
 
 [build-system]
