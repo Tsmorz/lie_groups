@@ -45,7 +45,7 @@ class SE2:
         return msg
 
     def __matmul__(self, other):
-        """Perform a matrix multiplication between two SE3 matrices."""
+        """Perform a matrix multiplication between two SE2 matrices."""
         if isinstance(other, SE2):
             new_se2 = self.as_matrix() @ other.as_matrix()
             return SE2(xy=new_se2[:2, -1], rot=new_se2[:2, :2])
@@ -55,7 +55,7 @@ class SE2:
             raise TypeError(msg)
 
     def as_vector(self) -> np.ndarray:
-        """Represent the data as a 6-by-1 matrix."""
+        """Represent the data as a 3-by-1 matrix."""
         x, y = np.reshape(self.trans, (2,))
         yaw = np.acos(self.rot[0, 0])
         return np.array([[x], [y], [yaw]])
@@ -67,7 +67,7 @@ class SE2:
         return matrix
 
     def inv(self) -> "SE2":
-        """Return the inverse of the SE3 pose."""
+        """Return the inverse of the SE2 pose."""
         rot_inv = np.linalg.inv(self.rot)
         trans_inv = -rot_inv @ self.trans
         return SE2(rot=rot_inv, xy=trans_inv)
