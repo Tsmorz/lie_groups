@@ -15,7 +15,7 @@ def main() -> None:
     )
     pose_1 = SE3(
         xyz=np.array([[2.0], [4.0], [8.0]]),
-        roll_pitch_yaw=np.array([np.pi / 2, np.pi / 4, np.pi / 8]),
+        roll_pitch_yaw=(np.pi / 2, np.pi / 4, np.pi / 8),
     )
 
     logger.info(f"Pose 1: {pose_0}")

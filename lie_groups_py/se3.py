@@ -3,10 +3,11 @@
 from typing import Optional
 
 import numpy as np
-from lie_groups_py.definitions import EULER_ORDER, VECTOR_LENGTH
 from loguru import logger
 from scipy import linalg
 from scipy.spatial.transform import Rotation as Rot
+
+from lie_groups_py.definitions import EULER_ORDER, VECTOR_LENGTH
 
 
 class SE3:
@@ -14,28 +15,26 @@ class SE3:
 
     def __init__(
         self,
-        xyz: Optional[np.ndarray] = None,
-        roll_pitch_yaw: Optional[np.ndarray] = None,
+        xyz: tuple[float, float, float] | np.ndarray,
+        roll_pitch_yaw: Optional[tuple[float, float, float]] = None,
         rot: Optional[np.ndarray] = None,
     ):
-        if xyz is None:
-            msg = "The translations vector 'xyz' must be provided."
-            logger.error(msg)
-            raise ValueError(msg)
-        if xyz.shape == (3,):
-            xyz = np.reshape(xyz, (3, 1))
-
-        if rot is not None:
-            self.rot = rot
-        elif roll_pitch_yaw is not None:
-            if roll_pitch_yaw.shape == (3, 1):
-                roll_pitch_yaw = np.reshape(roll_pitch_yaw, (3,))
+        if isinstance(roll_pitch_yaw, tuple | np.ndarray):
             rot = Rot.from_euler(angles=roll_pitch_yaw, seq=EULER_ORDER)
             self.rot = rot.as_matrix()
+        elif isinstance(rot, np.ndarray):
+            self.rot = rot
         else:
             msg = "Either 'roll_pitch_yaw' or 'rot' must be provided."
             logger.error(msg)
             raise ValueError(msg)
+
+        if isinstance(xyz, np.ndarray):
+            xyz = np.reshape(xyz, (3, 1))
+
+        if isinstance(xyz, tuple):
+            x, y, z = xyz
+            xyz = np.array([[x], [y], [z]])
 
         self.trans = xyz
 
@@ -56,14 +55,13 @@ class SE3:
         else:
             msg = "Matrix multiplication is only supported between SE3 poses."
             logger.error(msg)
-            raise ValueError(msg)
+            raise TypeError(msg)
 
     def as_vector(self, degrees: bool = False) -> np.ndarray:
         """Represent the data as a 6-by-1 matrix."""
-        xyz = np.reshape(self.trans, (3,))
         rot = Rot.from_matrix(matrix=self.rot)
         rpy = rot.as_euler(EULER_ORDER, degrees=degrees)
-        return np.hstack((xyz, rpy))
+        return np.vstack((self.trans, np.reshape(rpy, (3, 1))))
 
     def as_matrix(self) -> np.ndarray:
         """Represent the data as a 3-by-3 matrix."""
@@ -77,7 +75,9 @@ class SE3:
         trans_inv = -rot_inv @ self.trans
         return SE3(rot=rot_inv, xyz=trans_inv)
 
-    def plot(self, ax, vector_length: float = VECTOR_LENGTH) -> None:
+    def plot(
+        self, ax, vector_length: float = VECTOR_LENGTH
+    ) -> None:  # pragma: no cover
         """Plot the pose in 3D space.
 
         :param ax: The axis to plot the pose.
