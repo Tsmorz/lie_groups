@@ -29,34 +29,35 @@ class SE2:
             logger.error(msg)
             raise ValueError(msg)
 
-        x, y = xy
-        self.trans = np.array([[x], [y]])
+        if isinstance(xy, np.ndarray):
+            xy = np.reshape(xy, (2, 1))
+
+        if isinstance(xy, tuple):
+            x, y = xy
+            xy = np.array([[x], [y]])
+
+        self.trans = xy
 
     def __str__(self):  # pragma: no cover
         """Return a string representation of the pose."""
-        x, y, z, roll, pitch, yaw = self.as_vector()
-        msg = (
-            f"SE3 Pose=(x:{float(x):.2f}, y:{float(y):.2f}, z:{float(z):.2f}, "
-            f"roll:{float(roll):.2f}, pitch:{float(pitch):.2f}, yaw:{float(yaw):.2f})"
-        )
+        x, y, yaw = self.as_vector()
+        msg = f"SE2 Pose=(x:{float(x):.2f}, y:{float(y):.2f}, yaw:{float(yaw):.2f})"
         return msg
 
     def __matmul__(self, other):
         """Perform a matrix multiplication between two SE3 matrices."""
         if isinstance(other, SE2):
-            new_se3 = self.as_matrix() @ other.as_matrix()
-            return SE2(xy=new_se3[:3, -1], rot=new_se3[:3, :3])
+            new_se2 = self.as_matrix() @ other.as_matrix()
+            return SE2(xy=new_se2[:2, -1], rot=new_se2[:2, :2])
         else:
-            msg = "Matrix multiplication is only supported between SE3 poses."
+            msg = "Matrix multiplication is only supported between SE2 poses."
             logger.error(msg)
-            raise ValueError(msg)
+            raise TypeError(msg)
 
-    def as_vector(self, degrees: bool = False) -> np.ndarray:
+    def as_vector(self) -> np.ndarray:
         """Represent the data as a 6-by-1 matrix."""
         x, y = np.reshape(self.trans, (2,))
         yaw = np.acos(self.rot[0, 0])
-        if degrees:
-            yaw = np.rad2deg(yaw)
         return np.array([[x], [y], [yaw]])
 
     def as_matrix(self) -> np.ndarray:
@@ -71,7 +72,9 @@ class SE2:
         trans_inv = -rot_inv @ self.trans
         return SE2(rot=rot_inv, xy=trans_inv)
 
-    def plot(self, ax: plt.axes, vector_length: float = VECTOR_LENGTH) -> None:
+    def plot(
+        self, ax: plt.axes, vector_length: float = VECTOR_LENGTH
+    ) -> None:  # pragma: no cover
         """Plot the pose in 2D space.
 
         :param ax: The axis to plot the pose.

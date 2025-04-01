@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "lie_groups_py"
-version = "0.1.5"
+version = "0.1.6"
 description = "Functions for the lie groups SE(2), SO(2), and SO(3), and SE(3)."
 authors = ["Tsmorz <tonysmoragiewicz@gmail.com>"]
 readme = "README.md"
