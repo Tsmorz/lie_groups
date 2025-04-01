@@ -3,7 +3,7 @@
 from typing import Optional
 
 import numpy as np
-from lie_groups.definitions import EULER_ORDER, VECTOR_LENGTH
+from lie_groups_py.definitions import EULER_ORDER, VECTOR_LENGTH
 from loguru import logger
 from scipy import linalg
 from scipy.spatial.transform import Rotation as Rot
