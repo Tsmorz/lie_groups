@@ -1,6 +1,18 @@
 # LieGroupsPy
-Functions for the Lie Algebra group SE(3)
+Functions for the Lie Algebra group SE(2) and SE(3)
 
+$$ SE(2) =
+\begin{bmatrix}
+    R_{11} & R_{12} & t_1 \\
+    R_{21} & R_{22} & t_2 \\
+    0 & 0 & 1
+\end{bmatrix} $$
+
+where:
+- \( $\mathbf{R} \in SO(2) $\) is the **rotation matrix**.
+- \( $\mathbf{t} \in \mathbb{R}^2 $\) is the **translation vector**.
+
+  
 $$ SE(3) =
 \begin{bmatrix}
     R_{11} & R_{12} & R_{13} & t_1 \\
