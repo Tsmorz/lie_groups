@@ -13,7 +13,7 @@ def test_se3_with_xyz_1d() -> None:
     roll_pitch_yaw = (0.0, 0.0, 0.0)
 
     # Act
-    se3_pose = SE3(xyz=xyz, roll_pitch_yaw=roll_pitch_yaw)
+    se3_pose = SE3(xyz=xyz, yaw_pitch_roll=roll_pitch_yaw)
 
     # Assert
     np.testing.assert_array_almost_equal(se3_pose.as_matrix(), np.eye(4))
@@ -27,7 +27,7 @@ def test_se3_with_rpy() -> None:
     roll_pitch_yaw = (0.0, 0.0, 0.0)
 
     # Act
-    se3_pose = SE3(xyz=xyz, roll_pitch_yaw=roll_pitch_yaw)
+    se3_pose = SE3(xyz=xyz, yaw_pitch_roll=roll_pitch_yaw)
 
     # Assert
     np.testing.assert_array_almost_equal(se3_pose.as_matrix(), np.eye(4))
@@ -61,8 +61,8 @@ def test_se3_missing_orientation() -> None:
 def test_se3_multiplication() -> None:
     """Assert that the multiplication of two SE3 poses is correct."""
     # Arrange
-    pose_0 = SE3(xyz=(0.0, 0.0, 0.0), roll_pitch_yaw=(0.0, 0.0, 0.0))
-    pose_1 = SE3(xyz=(0.0, 0.0, 0.0), roll_pitch_yaw=(np.pi / 2, np.pi / 4, np.pi / 8))
+    pose_0 = SE3(xyz=(0.0, 0.0, 0.0), yaw_pitch_roll=(0.0, 0.0, 0.0))
+    pose_1 = SE3(xyz=(0.0, 0.0, 0.0), yaw_pitch_roll=(np.pi / 2, np.pi / 4, np.pi / 8))
 
     # Act
     new_pose = pose_0 @ pose_1
@@ -74,8 +74,8 @@ def test_se3_multiplication() -> None:
 def test_se3_multiplication_wrong_type() -> None:
     """Assert that a TypeError is raised when multiplying a SE3 pose with a non-SE3 pose."""
     # Arrange
-    pose_0 = SE3(xyz=(0.0, 0.0, 0.0), roll_pitch_yaw=(0.0, 0.0, 0.0))
-    pose_1 = SE3(xyz=(0.0, 0.0, 0.0), roll_pitch_yaw=(np.pi / 2, np.pi / 4, np.pi / 8))
+    pose_0 = SE3(xyz=(0.0, 0.0, 0.0), yaw_pitch_roll=(0.0, 0.0, 0.0))
+    pose_1 = SE3(xyz=(0.0, 0.0, 0.0), yaw_pitch_roll=(np.pi / 2, np.pi / 4, np.pi / 8))
 
     # Assert and Assert
     with pytest.raises(TypeError):
@@ -85,7 +85,7 @@ def test_se3_multiplication_wrong_type() -> None:
 def test_se3_inverse() -> None:
     """Assert that the inverse of a SE3 pose is correct."""
     # Arrange
-    pose_0 = SE3(xyz=(0.0, 0.0, 0.0), roll_pitch_yaw=(0.0, 0.0, 0.0))
+    pose_0 = SE3(xyz=(0.0, 0.0, 0.0), yaw_pitch_roll=(0.0, 0.0, 0.0))
 
     # Act
     inv_pose = pose_0.inv()
@@ -97,8 +97,8 @@ def test_se3_inverse() -> None:
 def test_interpolate_se3() -> None:
     """Assert that the interpolated se3 poses are correct."""
     # Arrange
-    se3_0 = SE3(xyz=(0.0, 0.0, 0.0), roll_pitch_yaw=(0.0, 0.0, 0.0))
-    se3_1 = SE3(xyz=(2.0, 4.0, 8.0), roll_pitch_yaw=(np.pi / 2, np.pi / 4, np.pi / 8))
+    se3_0 = SE3(xyz=(0.0, 0.0, 0.0), yaw_pitch_roll=(0.0, 0.0, 0.0))
+    se3_1 = SE3(xyz=(2.0, 4.0, 8.0), yaw_pitch_roll=(np.pi / 2, np.pi / 4, np.pi / 8))
 
     # Act
     se3_new_t0 = interpolate_se3(se3_0, se3_1, 0.0)

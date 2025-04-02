@@ -16,11 +16,11 @@ class SE3:
     def __init__(
         self,
         xyz: tuple[float, float, float] | np.ndarray,
-        roll_pitch_yaw: Optional[tuple[float, float, float]] = None,
+        yaw_pitch_roll: Optional[tuple[float, float, float]] = None,
         rot: Optional[np.ndarray] = None,
     ):
-        if isinstance(roll_pitch_yaw, tuple | np.ndarray):
-            rot = Rot.from_euler(angles=roll_pitch_yaw, seq=EULER_ORDER)
+        if isinstance(yaw_pitch_roll, tuple | np.ndarray):
+            rot = Rot.from_euler(angles=yaw_pitch_roll, seq=EULER_ORDER)
             self.rot = rot.as_matrix()
         elif isinstance(rot, np.ndarray):
             self.rot = rot
@@ -117,9 +117,9 @@ def interpolate_se3(pose_0: SE3, pose_1: SE3, t: float | np.floating) -> SE3:
     t_new = tran_1 - rot_new @ tran_0
 
     s = linalg.logm(rot_new)
-    u = linalg.inv(vt(s, 1.0)) @ t_new
+    u = linalg.inv(vt(S=s, t=1.0)) @ t_new
     expt_s = linalg.expm(t * s)
 
     rpy = Rot.from_matrix(matrix=expt_s @ rot_0).as_euler(EULER_ORDER, degrees=False)
-    xyz = expt_s @ tran_0 + t * vt(s, t) @ u
-    return SE3(xyz=xyz, roll_pitch_yaw=rpy)
+    xyz = expt_s @ tran_0 + t * vt(S=s, t=t) @ u
+    return SE3(xyz=xyz, yaw_pitch_roll=rpy)

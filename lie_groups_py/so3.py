@@ -24,7 +24,7 @@ class SO3:
         elif isinstance(rot, np.ndarray):
             self.rot = rot
         else:
-            msg = "Either 'roll_pitch_yaw' or 'rot' must be provided."
+            msg = "Either 'yaw_pitch_roll' or 'rot' must be provided."
             logger.error(msg)
             raise ValueError(msg)
 
