@@ -15,34 +15,19 @@ def main() -> None:
     )
     logger.info(pose_0)
 
+    pose_1 = SE3(
+        xyz=np.array([[0.0], [1.0], [2.0]]),
+        yaw_pitch_roll=(np.pi / 2, np.pi / 4, np.pi / 8),
+    )
+
+    pose_interp = interpolate_se3(pose_0, pose_1, t=0.5)
+
+    # plot the results
     fig = plt.figure()
     ax = fig.add_subplot(111, projection="3d")
     pose_0.plot(ax)
-
-    pose_1 = SE3(
-        xyz=np.array([[2.0], [2.0], [8.0]]),
-        yaw_pitch_roll=(np.pi / 2, np.pi / 4, np.pi / 8),
-    )
-    for t in np.arange(0.0, 1.01, 0.1):
-        pose_interp = interpolate_se3(pose_0, pose_1, t=t)
-        pose_interp.plot(ax)
-
-    pose_1 = SE3(
-        xyz=np.array([[-2.0], [2.0], [8.0]]),
-        yaw_pitch_roll=(np.pi / 2, np.pi / 4, np.pi / 8),
-    )
-    for t in np.arange(0.0, 1.01, 0.1):
-        pose_interp = interpolate_se3(pose_0, pose_1, t=t)
-        pose_interp.plot(ax)
-
-    pose_1 = SE3(
-        xyz=np.array([[0.0], [-5.0], [8.0]]),
-        yaw_pitch_roll=(np.pi / 2, np.pi / 4, np.pi / 8),
-    )
-    for t in np.arange(0.0, 1.01, 0.1):
-        pose_interp = interpolate_se3(pose_0, pose_1, t=t)
-        pose_interp.plot(ax)
-
+    pose_1.plot(ax)
+    pose_interp.plot(ax)
     plt.axis("equal")
     ax.set_xlabel("x-axis")
     ax.set_ylabel("y-axis")

@@ -68,7 +68,7 @@ def main() -> None:
         yaw_pitch_roll=(np.pi / 2, np.pi / 4, np.pi / 8),
     )
 
-    pose_interp = interpolate_se3(pose_0, pose_1, t=t)
+    pose_interp = interpolate_se3(pose_0, pose_1, t=0.5)
 
     # plot the results
     fig = plt.figure()
